@@ -42,7 +42,7 @@ public:
     QBrush brush;
     QString text;
     QFont font;
-    bool boolBorder,boolFill;
+    bool boolBorder, boolFill;
     void load(QString fileName);
     void save(QString path);
     void setAngle(qreal rotateAngle);

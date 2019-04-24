@@ -14,20 +14,51 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>海天鹰画图</string>
+   <string>海天鹰画图2</string>
   </property>
   <property name="windowIcon">
    <iconset resource="res.qrc">
     <normaloff>:/icon.png</normaloff>:/icon.png</iconset>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QGraphicsView" name="graphicsView">
+      <property name="backgroundBrush">
+       <brush brushstyle="Dense7Pattern">
+        <color alpha="255">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>1050</width>
-     <height>23</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -58,7 +89,7 @@
      <string>图像</string>
     </property>
     <addaction name="action_flip"/>
-    <addaction name="action_excude"/>
+    <addaction name="action_extrude"/>
     <addaction name="action_property"/>
     <addaction name="action_setWallpaper"/>
     <addaction name="action_gray"/>
@@ -101,7 +132,7 @@
    <addaction name="actionFill"/>
    <addaction name="actionErase"/>
    <addaction name="actionMove"/>
-   <addaction name="actionRectselect"/>
+   <addaction name="actionRectSelect"/>
    <addaction name="actionCutSelect"/>
    <addaction name="actionRotateLeft"/>
    <addaction name="actionRotateRight"/>
@@ -115,7 +146,8 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_open">
    <property name="icon">
-    <iconset theme="document-open"/>
+    <iconset theme="document-open">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>打开</string>
@@ -126,7 +158,8 @@
   </action>
   <action name="action_save">
    <property name="icon">
-    <iconset theme="document-save"/>
+    <iconset theme="document-save">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>保存</string>
@@ -137,7 +170,8 @@
   </action>
   <action name="action_saveas">
    <property name="icon">
-    <iconset theme="document-save-as"/>
+    <iconset theme="document-save-as">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>另存为</string>
@@ -148,7 +182,8 @@
   </action>
   <action name="action_quit">
    <property name="icon">
-    <iconset theme="application-exit"/>
+    <iconset theme="application-exit">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>退出</string>
@@ -159,7 +194,8 @@
   </action>
   <action name="action_undo">
    <property name="icon">
-    <iconset theme="edit-undo"/>
+    <iconset theme="edit-undo">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>撤销</string>
@@ -170,7 +206,8 @@
   </action>
   <action name="action_redo">
    <property name="icon">
-    <iconset theme="edit-redo"/>
+    <iconset theme="edit-redo">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>重做</string>
@@ -181,7 +218,8 @@
   </action>
   <action name="action_copy">
    <property name="icon">
-    <iconset theme="edit-copy"/>
+    <iconset theme="edit-copy">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>复制</string>
@@ -192,7 +230,8 @@
   </action>
   <action name="action_cut">
    <property name="icon">
-    <iconset theme="edit-cut"/>
+    <iconset theme="edit-cut">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>剪切</string>
@@ -203,7 +242,8 @@
   </action>
   <action name="action_paste">
    <property name="icon">
-    <iconset theme="edit-paste"/>
+    <iconset theme="edit-paste">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>粘贴</string>
@@ -214,7 +254,8 @@
   </action>
   <action name="action_selectAll">
    <property name="icon">
-    <iconset theme="edit-select-all"/>
+    <iconset theme="edit-select-all">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>全选</string>
@@ -225,7 +266,8 @@
   </action>
   <action name="action_delete">
    <property name="icon">
-    <iconset theme="edit-delete"/>
+    <iconset theme="edit-delete">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>删除</string>
@@ -245,7 +287,7 @@
     <string>Ctrl+R</string>
    </property>
   </action>
-  <action name="action_excude">
+  <action name="action_extrude">
    <property name="text">
     <string>拉伸/扭曲</string>
    </property>
@@ -258,7 +300,8 @@
   </action>
   <action name="action_property">
    <property name="icon">
-    <iconset theme="document-properties"/>
+    <iconset theme="document-properties">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>属性</string>
@@ -269,7 +312,8 @@
   </action>
   <action name="action_setWallpaper">
    <property name="icon">
-    <iconset theme="computer"/>
+    <iconset theme="computer">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>设为壁纸</string>
@@ -277,7 +321,8 @@
   </action>
   <action name="action_help">
    <property name="icon">
-    <iconset theme="help-contents"/>
+    <iconset theme="help-contents">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>帮助</string>
@@ -288,7 +333,8 @@
   </action>
   <action name="action_changelog">
    <property name="icon">
-    <iconset theme="help-faq"/>
+    <iconset theme="help-faq">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>更新日志</string>
@@ -296,7 +342,8 @@
   </action>
   <action name="action_about">
    <property name="icon">
-    <iconset theme="help-about"/>
+    <iconset theme="help-about">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>关于</string>
@@ -304,7 +351,8 @@
   </action>
   <action name="action_new">
    <property name="icon">
-    <iconset theme="document-new"/>
+    <iconset theme="document-new">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>新建</string>
@@ -315,7 +363,7 @@
   </action>
   <action name="actionPencil">
    <property name="checkable">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="checked">
     <bool>false</bool>
@@ -325,7 +373,7 @@
    </property>
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/pencil.png</normaloff>:/pencil.png</iconset>
+     <normaloff>:/images/pencil.png</normaloff>:/images/pencil.png</iconset>
    </property>
    <property name="text">
     <string>铅笔</string>
@@ -335,9 +383,12 @@
    </property>
   </action>
   <action name="actionLine">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/line.png</normaloff>:/line.png</iconset>
+     <normaloff>:/images/line.png</normaloff>:/images/line.png</iconset>
    </property>
    <property name="text">
     <string>直线</string>
@@ -347,9 +398,12 @@
    </property>
   </action>
   <action name="actionEllipse">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/ellipse.png</normaloff>:/ellipse.png</iconset>
+     <normaloff>:/images/ellipse.png</normaloff>:/images/ellipse.png</iconset>
    </property>
    <property name="text">
     <string>椭圆</string>
@@ -359,9 +413,12 @@
    </property>
   </action>
   <action name="actionRect">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/rect.png</normaloff>:/rect.png</iconset>
+     <normaloff>:/images/rect.png</normaloff>:/images/rect.png</iconset>
    </property>
    <property name="text">
     <string>矩形</string>
@@ -371,9 +428,12 @@
    </property>
   </action>
   <action name="actionText">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/text.png</normaloff>:/text.png</iconset>
+    <iconset theme="format-text-bold" resource="res.qrc">
+     <normaloff>:/images/text.png</normaloff>:/images/text.png</iconset>
    </property>
    <property name="text">
     <string>文本</string>
@@ -383,9 +443,12 @@
    </property>
   </action>
   <action name="actionErase">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/eraser.png</normaloff>:/eraser.png</iconset>
+     <normaloff>:/images/eraser.png</normaloff>:/images/eraser.png</iconset>
    </property>
    <property name="text">
     <string>擦子</string>
@@ -395,9 +458,12 @@
    </property>
   </action>
   <action name="actionMove">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/move.png</normaloff>:/move.png</iconset>
+     <normaloff>:/images/move.png</normaloff>:/images/move.png</iconset>
    </property>
    <property name="text">
     <string>move</string>
@@ -406,10 +472,13 @@
     <string>移动</string>
    </property>
   </action>
-  <action name="actionRectselect">
+  <action name="actionRectSelect">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/rectselect.png</normaloff>:/rectselect.png</iconset>
+     <normaloff>:/images/rectselect.png</normaloff>:/images/rectselect.png</iconset>
    </property>
    <property name="text">
     <string>rectselect</string>
@@ -461,7 +530,7 @@
   <action name="actionCutSelect">
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/clip.png</normaloff>:/clip.png</iconset>
+     <normaloff>:/images/clip.png</normaloff>:/images/clip.png</iconset>
    </property>
    <property name="text">
     <string>剪切选区</string>
@@ -471,9 +540,12 @@
    </property>
   </action>
   <action name="actionFill">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/fill.png</normaloff>:/fill.png</iconset>
+     <normaloff>:/images/fill.png</normaloff>:/images/fill.png</iconset>
    </property>
    <property name="text">
     <string>Fill</string>
@@ -489,68 +561,83 @@
   </action>
   <action name="actionZoomin">
    <property name="icon">
-    <iconset resource="res.qrc">
+    <iconset theme="zoom-in">
      <normaloff>:/zoomin.png</normaloff>:/zoomin.png</iconset>
    </property>
    <property name="text">
     <string>+</string>
    </property>
    <property name="toolTip">
-    <string>放大</string>
+    <string>放大 +</string>
+   </property>
+   <property name="shortcut">
+    <string>+</string>
    </property>
   </action>
   <action name="actionZoomout">
    <property name="icon">
-    <iconset resource="res.qrc">
+    <iconset theme="zoom-out">
      <normaloff>:/zoomout.png</normaloff>:/zoomout.png</iconset>
    </property>
    <property name="text">
     <string>-</string>
    </property>
    <property name="toolTip">
-    <string>缩小</string>
+    <string>缩小 -</string>
+   </property>
+   <property name="shortcut">
+    <string>-</string>
    </property>
   </action>
   <action name="actionZoom1">
    <property name="icon">
-    <iconset resource="res.qrc">
+    <iconset theme="zoom-original">
      <normaloff>:/zoom1.png</normaloff>:/zoom1.png</iconset>
    </property>
    <property name="text">
     <string>1</string>
    </property>
    <property name="toolTip">
-    <string>实际大小</string>
+    <string>原始大小 1</string>
+   </property>
+   <property name="shortcut">
+    <string>1</string>
    </property>
   </action>
   <action name="actionRotateRight">
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/rr.png</normaloff>:/rr.png</iconset>
+     <normaloff>:/images/rr.png</normaloff>:/images/rr.png</iconset>
    </property>
    <property name="text">
     <string>rotateRight</string>
    </property>
    <property name="toolTip">
-    <string>右转90°</string>
+    <string>右转1° R</string>
+   </property>
+   <property name="shortcut">
+    <string>R</string>
    </property>
   </action>
   <action name="actionRotateLeft">
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/rl.png</normaloff>:/rl.png</iconset>
+     <normaloff>:/images/rl.png</normaloff>:/images/rl.png</iconset>
    </property>
    <property name="text">
     <string>RotateLeft</string>
    </property>
    <property name="toolTip">
-    <string>左转90°</string>
+    <string>左转1° L</string>
+   </property>
+   <property name="shortcut">
+    <string>L</string>
    </property>
   </action>
   <action name="actionMirrorHorizontal">
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/MirrorHorizontal.png</normaloff>:/MirrorHorizontal.png</iconset>
+     <normaloff>:/images/MirrorHorizontal.png</normaloff>:/images/MirrorHorizontal.png</iconset>
    </property>
    <property name="text">
     <string>MirrorHorizontal</string>
@@ -562,7 +649,7 @@
   <action name="actionMirrorVertical">
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/MirrorVertical.png</normaloff>:/MirrorVertical.png</iconset>
+     <normaloff>:/images/MirrorVertical.png</normaloff>:/images/MirrorVertical.png</iconset>
    </property>
    <property name="text">
     <string>MirrorVertical</string>
@@ -595,9 +682,12 @@
    </property>
   </action>
   <action name="actionColorPicker">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/color_picker.png</normaloff>:/color_picker.png</iconset>
+     <normaloff>:/images/color_picker.png</normaloff>:/images/color_picker.png</iconset>
    </property>
    <property name="text">
     <string>颜色拾取</string>
@@ -607,9 +697,12 @@
    </property>
   </action>
   <action name="actionArrow">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/arrow.png</normaloff>:/arrow.png</iconset>
+     <normaloff>:/images/arrow.png</normaloff>:/images/arrow.png</iconset>
    </property>
    <property name="text">
     <string>箭头</string>

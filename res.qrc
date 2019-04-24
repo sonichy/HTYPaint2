@@ -1,24 +1,24 @@
 <RCC>
     <qresource prefix="/">
         <file>icon.png</file>
-        <file>clip.png</file>
-        <file>ellipse.png</file>
-        <file>eraser.png</file>
-        <file>line.png</file>
-        <file>move.png</file>
-        <file>pencil.png</file>
-        <file>rect.png</file>
-        <file>rectselect.png</file>
-        <file>text.png</file>
-        <file>fill.png</file>
-        <file>zoomin.png</file>
-        <file>zoomout.png</file>
-        <file>zoom1.png</file>
-        <file>rl.png</file>
-        <file>rr.png</file>
-        <file>MirrorHorizontal.png</file>
-        <file>MirrorVertical.png</file>
-        <file>color_picker.png</file>
-        <file>arrow.png</file>
+        <file>images/clip.png</file>
+        <file>images/ellipse.png</file>
+        <file>images/eraser.png</file>
+        <file>images/line.png</file>
+        <file>images/move.png</file>
+        <file>images/pencil.png</file>
+        <file>images/rect.png</file>
+        <file>images/rectselect.png</file>
+        <file>images/text.png</file>
+        <file>images/fill.png</file>
+        <file>images/zoomin.png</file>
+        <file>images/zoomout.png</file>
+        <file>images/zoom1.png</file>
+        <file>images/rl.png</file>
+        <file>images/rr.png</file>
+        <file>images/MirrorHorizontal.png</file>
+        <file>images/MirrorVertical.png</file>
+        <file>images/color_picker.png</file>
+        <file>images/arrow.png</file>
     </qresource>
 </RCC>
