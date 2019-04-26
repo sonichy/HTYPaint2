@@ -36,6 +36,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent*);
     void dropEvent(QDropEvent*);
     void wheelEvent(QWheelEvent *e);
+    void resizeEvent(QResizeEvent *event);
 
 private:
     QScrollArea *scrollArea;

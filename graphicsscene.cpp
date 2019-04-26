@@ -3,6 +3,9 @@
 #include <QDebug>
 #include <QGraphicsTextItem>
 #include <QtMath>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QClipboard>
 
 GraphicsScene::GraphicsScene()
 {
@@ -62,4 +65,12 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         setSelectionArea(*PP);
     }
     QGraphicsScene::mouseReleaseEvent(event);
+}
+
+void GraphicsScene::copy()
+{
+    QRectF rect(startPnt, endPnt);
+    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(), rect.x(), rect.y(), rect.width(), rect.height());
+    //QPixmap pixmap = this->grab(rect);
+    QApplication::clipboard()->setPixmap(pixmap, QClipboard::Clipboard);
 }

@@ -34,6 +34,7 @@ public:
         COLORPICKER_DRAW,
         RECT_SELECT
     } draw_type;
+    void copy();
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

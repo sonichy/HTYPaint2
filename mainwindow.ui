@@ -39,14 +39,8 @@
     </property>
     <item>
      <widget class="QGraphicsView" name="graphicsView">
-      <property name="backgroundBrush">
-       <brush brushstyle="Dense7Pattern">
-        <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
-        </color>
-       </brush>
+      <property name="renderHints">
+       <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
       </property>
      </widget>
     </item>
