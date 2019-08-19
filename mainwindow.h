@@ -72,7 +72,10 @@ private slots:
     void on_action_invert_triggered();
     void on_action_blur_triggered();
     void on_action_mosaic_triggered();
-    void on_action_transparent_triggered();
+    void on_action_opacity_triggered();
+    void on_action_zoomin_item_triggered();
+    void on_action_zoomout_item_triggered();
+    void on_action_zoom1_item_triggered();
 
     void on_actionPencil_triggered();
     void on_actionLine_triggered();
@@ -93,7 +96,7 @@ private slots:
     void on_actionFont_triggered();
     void on_actionZoomin_triggered();
     void on_actionZoomout_triggered();
-    void on_actionZoom1_triggered();
+    //void on_actionZoom1_triggered();
 
     void setColorFill();
     void setColorBorder();

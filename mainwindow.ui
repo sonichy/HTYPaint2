@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1050</width>
-    <height>600</height>
+    <height>700</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -18,7 +18,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="res.qrc">
-    <normaloff>:/icon.png</normaloff>:/icon.png</iconset>
+    <normaloff>:/HTYPaint2.png</normaloff>:/HTYPaint2.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -26,13 +26,13 @@
      <number>0</number>
     </property>
     <property name="leftMargin">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="topMargin">
      <number>0</number>
     </property>
     <property name="rightMargin">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="bottomMargin">
      <number>0</number>
@@ -86,10 +86,10 @@
     <addaction name="action_extrude"/>
     <addaction name="action_property"/>
     <addaction name="action_setWallpaper"/>
-    <addaction name="action_gray"/>
-    <addaction name="action_invert"/>
-    <addaction name="action_blur"/>
-    <addaction name="action_transparent"/>
+    <addaction name="action_zoomin_item"/>
+    <addaction name="action_zoomout_item"/>
+    <addaction name="action_zoom1_item"/>
+    <addaction name="action_opacity"/>
     <addaction name="action_mosaic"/>
    </widget>
    <widget class="QMenu" name="menu_about">
@@ -652,14 +652,28 @@
     <string>垂直镜像</string>
    </property>
   </action>
-  <action name="action_gray">
+  <action name="action_zoomin_item">
+   <property name="icon">
+    <iconset theme="zoom-in">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
-    <string>灰度</string>
+    <string>放大</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl++</string>
    </property>
   </action>
-  <action name="action_invert">
+  <action name="action_zoomout_item">
+   <property name="icon">
+    <iconset theme="zoom-out">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
-    <string>反色</string>
+    <string>缩小</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
    </property>
   </action>
   <action name="action_import">
@@ -670,9 +684,16 @@
     <string>Ctrl+I</string>
    </property>
   </action>
-  <action name="action_blur">
+  <action name="action_zoom1_item">
+   <property name="icon">
+    <iconset theme="zoom-original">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
-    <string>模糊</string>
+    <string>原始大小</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+0</string>
    </property>
   </action>
   <action name="actionColorPicker">
@@ -705,12 +726,12 @@
     <string>箭头</string>
    </property>
   </action>
-  <action name="action_transparent">
+  <action name="action_opacity">
    <property name="text">
-    <string>颜色透明</string>
+    <string>透明度</string>
    </property>
-   <property name="toolTip">
-    <string>颜色透明</string>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
   <action name="action_mosaic">

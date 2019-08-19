@@ -9,6 +9,8 @@ class GraphicsScene : public QGraphicsScene
 
 public:
     GraphicsScene();
+    QPointF startPnt;   //起点
+    QPointF endPnt;     //终点
     QPen pen;
     QBrush brush;
     QFont font;
@@ -42,8 +44,6 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-    QPointF startPnt;   //起点
-    QPointF endPnt;     //终点
 
 };
 
