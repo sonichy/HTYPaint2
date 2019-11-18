@@ -22,6 +22,9 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         break;
     case MOVE_DRAW:
         QGraphicsScene::mousePressEvent(event);//不加这句图元无法点选和拖动
+        break;
+    default:
+        break;
     }
 }
 
@@ -31,6 +34,8 @@ void GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     switch(draw_type){
     case PATH_DRAW:
         PP->lineTo(endPnt);
+        break;
+    default:
         break;
     }
     QGraphicsScene::mouseMoveEvent(event);
@@ -54,11 +59,16 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         QGraphicsEllipseItem *GEI = addEllipse(QRectF(startPnt, endPnt), pen, brush);
         GEI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
     }else if(draw_type == TEXT_DRAW){
-        QGraphicsTextItem *GTI = addText(text,font);
+        QGraphicsTextItem *GTI = addText(text, font);
         GTI->setDefaultTextColor(pen.color());
         GTI->setPos(endPnt);
         GTI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
         //GTI->setTextInteractionFlags(Qt::TextEditorInteraction);
+        if(isFill){
+            QGraphicsRectItem *GRI = addRect(QRectF(endPnt, GTI->boundingRect().size()), pen, brush);
+            GRI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemClipsToShape |QGraphicsItem::ItemClipsChildrenToShape);
+            GRI->stackBefore(GTI);//设置层次
+        }
     }else if(draw_type == RECT_SELECT){
         PP = new QPainterPath;
         PP->addRect(QRectF(startPnt, endPnt));

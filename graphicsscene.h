@@ -37,6 +37,7 @@ public:
         RECT_SELECT
     } draw_type;
     void copy();
+    bool isFill;
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

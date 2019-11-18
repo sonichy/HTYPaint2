@@ -28,7 +28,7 @@ public:
     QSpinBox *spinbox;
     QString text, path;
     QColor colorb,colorf;
-    QCheckBox *checkFill, *checkBorder;
+    QCheckBox *checkBox_color_fill, *checkBox_color_border;
     QFont font;
     QString filename;
 
@@ -106,8 +106,8 @@ private slots:
     void onSpinhChanged(int);
     void onSpinwrChanged(int);
     void onSpinhrChanged(int);
-    void checkBorderChanged(int);
-    void checkFillChanged(int);
+    void checkBox_color_border_Changed(int);
+    void checkBox_color_fill_Changed(int);
     void open(QString);
     void setPicker(QColor color);
     void addPenWidth();

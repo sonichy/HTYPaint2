@@ -74,15 +74,15 @@ MainWindow::MainWindow(QWidget *parent) :
     btnColorBorder->setText("□");
     btnColorBorder->setToolTip("边框");
     ui->mainToolBar->addWidget(btnColorBorder);
-    checkBorder = new QCheckBox(this);
-    checkBorder->setCheckState(Qt::Checked);
-    ui->mainToolBar->addWidget(checkBorder);
+    checkBox_color_border = new QCheckBox(this);
+    checkBox_color_border->setCheckState(Qt::Checked);
+    ui->mainToolBar->addWidget(checkBox_color_border);
     btnColorFill = new QToolButton(this);
     btnColorFill->setText("■");
     btnColorFill->setToolTip("填充");
     ui->mainToolBar->addWidget(btnColorFill);
-    checkFill = new QCheckBox(this);
-    ui->mainToolBar->addWidget(checkFill);
+    checkBox_color_fill = new QCheckBox(this);
+    ui->mainToolBar->addWidget(checkBox_color_fill);
     spinbox = new QSpinBox(this);
     spinbox->setSingleStep(1);
     spinbox->setRange(1,100);
@@ -101,8 +101,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(btnColorBorder, SIGNAL(clicked()), this, SLOT(setColorBorder()));
     connect(spinbox, SIGNAL(valueChanged(int)), this, SLOT(spinValueChange(int)));
     connect(lineEdit, SIGNAL(textChanged(QString)), this, SLOT(textChange(QString)));
-    connect(checkBorder, SIGNAL(stateChanged(int)), this, SLOT(checkBorderChanged(int)));
-    connect(checkFill, SIGNAL(stateChanged(int)), this, SLOT(checkFillChanged(int)));
+    connect(checkBox_color_border, SIGNAL(stateChanged(int)), this, SLOT(checkBox_color_border_Changed(int)));
+    connect(checkBox_color_fill, SIGNAL(stateChanged(int)), this, SLOT(checkBox_color_fill_Changed(int)));
 
     connect(new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Up), this), SIGNAL(activated()), this, SLOT(moveUp()));
     connect(new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Down), this), SIGNAL(activated()), this, SLOT(moveDown()));
@@ -147,7 +147,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_action_changelog_triggered()
 {
-    QString s = "2.1\n(2019-08)\n增加：视图缩放。透明度设置。\n修复：没有滚动条。但是缩放视图后，横向滚动条消失。\n\n2.0\n(2019-04)\n增加保存为SVG格式。\n粘贴剪贴板里的图片。\n水平、垂直镜像。\n修改文字内容。\n图像缩放\n路径绘制。\n实现框选。\n直线、矩形、椭圆快捷键微调大小。\n图元可以修改颜色、移动、删除。\n实现画点、线、框、圆、字。";
+    QString s = "2.2\n(2019-11)\n增加：文字工具可以绘制背景。\n\n2.1\n(2019-08)\n增加：视图缩放。透明度设置。\n修复：没有滚动条。但是缩放视图后，横向滚动条消失。\n\n2.0\n(2019-04)\n增加保存为SVG格式。\n粘贴剪贴板里的图片。\n水平、垂直镜像。\n修改文字内容。\n图像缩放\n路径绘制。\n实现框选。\n直线、矩形、椭圆快捷键微调大小。\n图元可以修改颜色、移动、删除。\n实现画点、线、框、圆、字。";
     QDialog *dialog = new QDialog;
     dialog->setWindowTitle("更新历史");
     dialog->setFixedSize(400,300);
@@ -177,7 +177,7 @@ void MainWindow::on_action_aboutQt_triggered()
 
 void MainWindow::on_action_about_triggered()
 {
-    QMessageBox aboutMB(QMessageBox::NoIcon, "关于", "海天鹰画图 2.0\n一款基于 QGraphicItem 的画图程序。\n作者：黄颖\nE-mail: sonichy@163.com\n主页：https://github.com/sonichy\n参考文献：\nQGraphicsScene 管理 QGraphicsItem（单击/选择/移动/缩放/删除）：\nhttps://blog.csdn.net/liang19890820/article/details/53504323\nQGraphicsItem 的类型检测与转换 https://blog.csdn.net/liang19890820/article/details/53612446\n水平、垂直镜像算法：https://gerrysweeney.com/horizontal-and-vertical-flip-transformations-of-a-qgraphicsitem-in-qt-qgraphicsview\n保存SVG：Qt_drawcli");
+    QMessageBox aboutMB(QMessageBox::NoIcon, "关于", "海天鹰画图 2.2\n一款基于 QGraphicItem 的画图程序。\n作者：黄颖\nE-mail: sonichy@163.com\n主页：https://github.com/sonichy\n参考文献：\nQGraphicsScene 管理 QGraphicsItem（单击/选择/移动/缩放/删除）：\nhttps://blog.csdn.net/liang19890820/article/details/53504323\nQGraphicsItem 的类型检测与转换 https://blog.csdn.net/liang19890820/article/details/53612446\n水平、垂直镜像算法：https://gerrysweeney.com/horizontal-and-vertical-flip-transformations-of-a-qgraphicsitem-in-qt-qgraphicsview\n保存SVG：Qt_drawcli\nQGraphicsItem 层次调整：https://blog.csdn.net/ly7969/article/details/8073883");
     aboutMB.setIconPixmap(QPixmap(":/HTYPaint2.png"));
     aboutMB.exec();
 }
@@ -326,7 +326,7 @@ void MainWindow::setColorFill()
     }
 }
 
-void MainWindow::checkBorderChanged(int state)
+void MainWindow::checkBox_color_border_Changed(int state)
 {
     if(state == Qt::Checked){
         QPalette plt = btnColorBorder->palette();
@@ -358,16 +358,18 @@ void MainWindow::checkBorderChanged(int state)
     }
 }
 
-void MainWindow::checkFillChanged(int state)
+void MainWindow::checkBox_color_fill_Changed(int state)
 {
     if (state == Qt::Checked) {
         QPalette plt = btnColorFill->palette();
         QBrush brush = plt.color(QPalette::ButtonText);
         colorf = brush.color();
         scene->brush.setColor(colorf);
+        scene->isFill = true;
     } else if (state == Qt::PartiallyChecked){
     } else {
         scene->brush.setColor(Qt::transparent);
+        scene->isFill = false;
     }
     QList<QGraphicsItem*> list_item = scene->selectedItems();
     for(int i=0; i<list_item.size(); i++){
