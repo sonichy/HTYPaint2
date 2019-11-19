@@ -59,15 +59,22 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         QGraphicsEllipseItem *GEI = addEllipse(QRectF(startPnt, endPnt), pen, brush);
         GEI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
     }else if(draw_type == TEXT_DRAW){
-        QGraphicsTextItem *GTI = addText(text, font);
-        GTI->setDefaultTextColor(pen.color());
-        GTI->setPos(endPnt);
-        GTI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
-        //GTI->setTextInteractionFlags(Qt::TextEditorInteraction);
-        if(isFill){
-            QGraphicsRectItem *GRI = addRect(QRectF(endPnt, GTI->boundingRect().size()), pen, brush);
-            GRI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemClipsToShape |QGraphicsItem::ItemClipsChildrenToShape);
-            GRI->stackBefore(GTI);//设置层次
+        if(!isFill){
+            QGraphicsTextItem *GTI = addText(text, font);
+            GTI->setDefaultTextColor(pen.color());
+            GTI->setPos(endPnt);
+            GTI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+            //GTI->setTextInteractionFlags(Qt::TextEditorInteraction);
+        }else{
+            QGraphicsTextItem *GTI = addText(text, font);
+            GTI->setDefaultTextColor(pen.color());
+            QGraphicsRectItem *GRI = addRect(0, 0, GTI->boundingRect().size().width(), GTI->boundingRect().size().height(), pen, brush);
+            QGraphicsItemGroup *GIG = new QGraphicsItemGroup;
+            GIG->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+            GIG->addToGroup(GRI);
+            GIG->addToGroup(GTI);
+            addItem(GIG);
+            GIG->setPos(endPnt);
         }
     }else if(draw_type == RECT_SELECT){
         PP = new QPainterPath;

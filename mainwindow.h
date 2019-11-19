@@ -97,6 +97,8 @@ private slots:
     void on_actionZoomin_triggered();
     void on_actionZoomout_triggered();
     //void on_actionZoom1_triggered();
+    void on_action_createGroup_triggered();
+    void on_action_destroyGroup_triggered();
 
     void setColorFill();
     void setColorBorder();

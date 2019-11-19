@@ -52,7 +52,7 @@
      <x>0</x>
      <y>0</y>
      <width>1050</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -77,6 +77,8 @@
     <addaction name="action_paste"/>
     <addaction name="action_selectAll"/>
     <addaction name="action_delete"/>
+    <addaction name="action_createGroup"/>
+    <addaction name="action_destroyGroup"/>
    </widget>
    <widget class="QMenu" name="menu_image">
     <property name="title">
@@ -740,6 +742,22 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="action_createGroup">
+   <property name="text">
+    <string>组群</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="action_destroyGroup">
+   <property name="text">
+    <string>散群</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
    </property>
   </action>
  </widget>

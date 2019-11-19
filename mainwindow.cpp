@@ -147,7 +147,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_action_changelog_triggered()
 {
-    QString s = "2.2\n(2019-11)\n增加：文字工具可以绘制背景。\n\n2.1\n(2019-08)\n增加：视图缩放。透明度设置。\n修复：没有滚动条。但是缩放视图后，横向滚动条消失。\n\n2.0\n(2019-04)\n增加保存为SVG格式。\n粘贴剪贴板里的图片。\n水平、垂直镜像。\n修改文字内容。\n图像缩放\n路径绘制。\n实现框选。\n直线、矩形、椭圆快捷键微调大小。\n图元可以修改颜色、移动、删除。\n实现画点、线、框、圆、字。";
+    QString s = "2.2\n(2019-11)\n增加：组群和散群。\n增加：文字工具可以绘制背景。\n\n2.1\n(2019-08)\n增加：视图缩放。透明度设置。\n修复：没有滚动条。但是缩放视图后，横向滚动条消失。\n\n2.0\n(2019-04)\n增加保存为SVG格式。\n粘贴剪贴板里的图片。\n水平、垂直镜像。\n修改文字内容。\n图像缩放\n路径绘制。\n实现框选。\n直线、矩形、椭圆快捷键微调大小。\n图元可以修改颜色、移动、删除。\n实现画点、线、框、圆、字。";
     QDialog *dialog = new QDialog;
     dialog->setWindowTitle("更新历史");
     dialog->setFixedSize(400,300);
@@ -268,6 +268,25 @@ void MainWindow::on_action_delete_triggered()
     QList<QGraphicsItem*> list_item = scene->selectedItems();
     for(int i=0; i<list_item.size(); i++){
         scene->removeItem(list_item[i]);
+    }
+}
+
+void MainWindow::on_action_createGroup_triggered()
+{
+    QList<QGraphicsItem*> list_item = scene->selectedItems();
+    scene->clearSelection();
+    QGraphicsItemGroup *GIG = scene->createItemGroup(list_item);
+    GIG->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+}
+
+void MainWindow::on_action_destroyGroup_triggered()
+{
+    QList<QGraphicsItem*> list_item = scene->selectedItems();
+    for(int i=0; i<list_item.size(); i++){
+        if(list_item[i]->type() == QGraphicsItemGroup::Type){
+            QGraphicsItemGroup *GIG = qgraphicsitem_cast<QGraphicsItemGroup*>(list_item[i]);
+            scene->destroyItemGroup(GIG);
+        }
     }
 }
 
