@@ -63,6 +63,8 @@ private slots:
     void on_action_paste_triggered();
     void on_action_selectAll_triggered();
     void on_action_delete_triggered();
+    void on_action_layerTop_triggered();
+    void on_action_layerBottom_triggered();
     void on_action_setWallpaper_triggered();
     void on_action_property_triggered();
     void on_action_help_triggered();
