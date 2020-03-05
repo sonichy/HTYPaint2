@@ -20,12 +20,10 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     case PATH_DRAW:
         PP = new QPainterPath(startPnt);
         break;
-    case MOVE_DRAW:
-        QGraphicsScene::mousePressEvent(event);//不加这句图元无法点选和拖动
-        break;
     default:
         break;
     }
+    QGraphicsScene::mousePressEvent(event);//不加这句图元无法点选和拖动
 }
 
 void GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)

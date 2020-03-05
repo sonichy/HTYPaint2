@@ -27,7 +27,7 @@ public:
     QLineEdit *lineEdit;
     QSpinBox *spinbox;
     QString text, path;
-    QColor colorb,colorf;
+    QColor colorb, colorf, color_background;
     QCheckBox *checkBox_color_fill, *checkBox_color_border;
     QFont font;
     QString filename;
