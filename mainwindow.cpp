@@ -95,9 +95,6 @@ MainWindow::MainWindow(QWidget *parent) :
     lineEdit->setFixedWidth(60);
     ui->mainToolBar->addWidget(lineEdit);
 
-    //connect(ui->action_new, SIGNAL(triggered(bool)), imageWidget, SLOT(newfile()));
-    connect(ui->action_quit, SIGNAL(triggered()), qApp, SLOT(quit()));
-
     connect(btnColorFill, SIGNAL(clicked()), this, SLOT(setColorFill()));
     connect(btnColorBorder, SIGNAL(clicked()), this, SLOT(setColorBorder()));
     connect(spinbox, SIGNAL(valueChanged(int)), this, SLOT(spinValueChange(int)));
@@ -118,11 +115,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Up), this), SIGNAL(activated()), this, SLOT(moveBottomUp()));
     connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Down), this), SIGNAL(activated()), this, SLOT(moveBottomDown()));
 
+    connect(ui->listWidget, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(listWidgetCurrentItemChanged(QListWidgetItem*, QListWidgetItem*)));
+
     scene = new GraphicsScene;
     scene->text = text;
     scene->font = qApp->font();
+    scene->GIID = 0;
     ui->graphicsView->setScene(scene);
     ui->graphicsView->resize(800,600);
+    connect(scene, SIGNAL(newItem(QString)), this, SLOT(listWidgetAddObject(QString)));
 
     //生成棋盘背景
     QPixmap pixmap(50,50);
@@ -153,7 +154,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_action_changelog_triggered()
 {
-    QString s = "2.3\n(2020-03)\n修复：右键不能打开图片的问题\n修复：打开qgs文件，图元无法移动的问题。\n2.2\n(2019-11)\n增加：属性页设置背景。\n增加：置顶和置底。\n增加：组群和散群。\n增加：文字工具可以绘制背景。\n\n2.1\n(2019-08)\n增加：视图缩放。透明度设置。\n修复：没有滚动条。但是缩放视图后，横向滚动条消失。\n\n2.0\n(2019-04)\n增加保存为SVG格式。\n粘贴剪贴板里的图片。\n水平、垂直镜像。\n修改文字内容。\n图像缩放\n路径绘制。\n实现框选。\n直线、矩形、椭圆快捷键微调大小。\n图元可以修改颜色、移动、删除。\n实现画点、线、框、圆、字。";
+    QString s = "2.3\n(2020-03)\n增加：对象列表和选取。\n修复：右键不能打开图片的问题\n修复：打开qgs文件，图元无法移动的问题。\n\n2.2\n(2019-11)\n增加：属性页设置背景。\n增加：置顶和置底。\n增加：组群和散群。\n增加：文字工具可以绘制背景。\n\n2.1\n(2019-08)\n增加：视图缩放。透明度设置。\n修复：没有滚动条。但是缩放视图后，横向滚动条消失。\n\n2.0\n(2019-04)\n增加保存为SVG格式。\n粘贴剪贴板里的图片。\n水平、垂直镜像。\n修改文字内容。\n图像缩放\n路径绘制。\n实现框选。\n直线、矩形、椭圆快捷键微调大小。\n图元可以修改颜色、移动、删除。\n实现画点、线、框、圆、字。";
     QDialog *dialog = new QDialog;
     dialog->setWindowTitle("更新历史");
     dialog->setFixedSize(400,300);
@@ -447,6 +448,8 @@ void MainWindow::textChange(QString s)
 void MainWindow::on_action_new_triggered()
 {
     scene->clear();
+    ui->listWidget->clear();
+    setWindowTitle("海天鹰画图2");
 }
 
 void MainWindow::on_action_open_triggered()
@@ -461,6 +464,7 @@ void MainWindow::on_action_open_triggered()
 void MainWindow::open(QString filepath)
 {
     scene->clear();
+    ui->listWidget->clear();
     if(QFileInfo(filepath).suffix() == "qgs"){
         QFile *file = new QFile(filepath);
         if(file->open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -469,14 +473,14 @@ void MainWindow::open(QString filepath)
             QString s = TS.readAll();
             file->close();
             QStringList line = s.split("\n");
-            for(int i=0; i<line.size(); i++){
-                if(line.at(i).startsWith("QGraphicsScene:")){
+            for (int i=0; i<line.size(); i++) {
+                if (line.at(i).startsWith("QGraphicsScene:")) {
                     QString s = line.at(i).mid(line.at(i).indexOf(":") + 1);
                     float w = s.mid(0, s.indexOf(",")).toFloat();
                     float h = s.mid(s.indexOf(",") + 1).toFloat();
                     QRect rect(0, 0, w, h);
                     scene->setSceneRect(rect);
-                }else if(line.at(i).startsWith("QGraphicsRectItem:")){
+                } else if (line.at(i).startsWith("QGraphicsRectItem:")){
                     QString s = line.at(i).mid(line.at(i).indexOf(":") + 1);
                     QStringList params = s.split(";");
                     QString xywh = params.at(0);
@@ -495,7 +499,9 @@ void MainWindow::open(QString filepath)
                     QBrush brush(color_brush);
                     QGraphicsRectItem *GRI = scene->addRect(x, y, w, h, pen, brush);
                     GRI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
-                }else if(line.at(i).startsWith("QGraphicsEllipseItem:")){
+                    GRI->setData(GRAPHICSITEM_ID, scene->GIID);
+                    listWidgetAddObject("Rect");
+                } else if (line.at(i).startsWith("QGraphicsEllipseItem:")) {
                     QString s = line.at(i).mid(line.at(i).indexOf(":") + 1);
                     QStringList params = s.split(";");
                     QString xywh = params.at(0);
@@ -514,7 +520,9 @@ void MainWindow::open(QString filepath)
                     QBrush brush(color_brush);
                     QGraphicsEllipseItem *GEI = scene->addEllipse(x, y, w, h, pen, brush);
                     GEI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
-                }else if(line.at(i).startsWith("QGraphicsTextItem:")){
+                    GEI->setData(GRAPHICSITEM_ID, scene->GIID);
+                    listWidgetAddObject("Ellipse");
+                } else if (line.at(i).startsWith("QGraphicsTextItem:")) {
                     QString s = line.at(i).mid(line.at(i).indexOf(":") + 1);
                     QStringList params = s.split(";");
                     QString xy = params.at(0);
@@ -528,15 +536,19 @@ void MainWindow::open(QString filepath)
                     GTI->setDefaultTextColor(color);
                     GTI->setPos(QPoint(x,y));
                     GTI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+                    GTI->setData(GRAPHICSITEM_ID, scene->GIID);
+                    listWidgetAddObject("Text");
                 }
             }
         }
-    }else{
+    } else {
         QPixmap pixmap(filepath);
         QGraphicsPixmapItem *GPI = scene->addPixmap(pixmap);
         GPI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+        GPI->setData(GRAPHICSITEM_ID, scene->GIID);
         scene->setSceneRect(0, 0, pixmap.width(), pixmap.height());
         ui->graphicsView->resize(pixmap.size() + QSize(2,2));
+        listWidgetAddObject("Image");
     }
     filename = QFileInfo(filepath).fileName();
     setWindowTitle(filename + " - 海天鹰画图2");
@@ -545,7 +557,8 @@ void MainWindow::open(QString filepath)
     qDebug() << path;
 }
 
-void MainWindow::on_action_import_triggered(){
+void MainWindow::on_action_import_triggered()
+{
     QString filenamei = "";
     if (path == "") path = ".";
     filenamei = QFileDialog::getOpenFileName(this,"导入图片", path, "图片文件(*.jpg *.png *.bmp)");
@@ -554,10 +567,13 @@ void MainWindow::on_action_import_triggered(){
         QPixmap pixmap(filenamei);
         QGraphicsPixmapItem *GPI = scene->addPixmap(pixmap);
         GPI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+        GPI->setData(GRAPHICSITEM_ID, scene->GIID);
+        listWidgetAddObject("Image");
     }
 }
 
-void MainWindow::on_action_save_triggered(){
+void MainWindow::on_action_save_triggered()
+{
     qDebug() << "save path=" << path;
     if(path.length() != 0){
         save(path);
@@ -580,7 +596,7 @@ void MainWindow::save(QString filepath)
     LSB1->setText("保存 " + filepath);
     scene->clearSelection();    //清除选区（虚线框），不然会一起保存。
     QSize size(scene->width(), scene->height());
-    if(QFileInfo(filepath).suffix() == "svg"){
+    if (QFileInfo(filepath).suffix() == "svg") {
         QSvgGenerator generator;
         generator.setFileName(filepath);
         generator.setSize(size);
@@ -591,17 +607,17 @@ void MainWindow::save(QString filepath)
         painter.begin(&generator);
         scene->render(&painter);
         painter.end();
-    }else if(QFileInfo(filepath).suffix() == "qgs"){
+    } else if(QFileInfo(filepath).suffix() == "qgs") {
         QString s = "QGraphicsScene:" + QString::number(scene->width()) + "," + QString::number(scene->height());
         QList<QGraphicsItem*> list_item = scene->items();
-        for(int i=list_item.size() - 1; i>=0; i--){
-            if(list_item[i]->type() == QGraphicsLineItem::Type){
+        for (int i=list_item.size() - 1; i>=0; i--) {
+            if (list_item[i]->type() == QGraphicsLineItem::Type) {
                 QGraphicsLineItem *GLI = qgraphicsitem_cast<QGraphicsLineItem*>(list_item[i]);
                 QLineF line = GLI->line();
                 QPen pen = GLI->pen();
                 QColor color = pen.color();
                 s += "\nQGraphicsLineItem:" + QString::number(line.x1()) + "," + QString::number(line.y1()) + "," + QString::number(line.x2()) + "," + QString::number(line.y2()) + ";" + QString::number(color.red()) + "," + QString::number(color.green()) + QString::number(color.blue()) + "," + QString::number(color.alpha()) + ";" + QString::number(pen.width());
-            }else if(list_item[i]->type() == QGraphicsRectItem::Type){
+            } else if (list_item[i]->type() == QGraphicsRectItem::Type) {
                 QGraphicsRectItem *GRI = qgraphicsitem_cast<QGraphicsRectItem*>(list_item[i]);
                 QRectF rect = GRI->rect();
                 QPen pen = GRI->pen();
@@ -609,7 +625,7 @@ void MainWindow::save(QString filepath)
                 QBrush brush = GRI->brush();
                 QColor color_brush = brush.color();
                 s += "\nQGraphicsRectItem:" + QString::number(rect.x()) + "," + QString::number(rect.y()) + "," + QString::number(rect.width()) + "," + QString::number(rect.height()) + ";" + QString::number(color_pen.red()) + "," + QString::number(color_pen.green())  + "," + QString::number(color_pen.blue()) + "," + QString::number(color_pen.alpha()) + ";" + QString::number(color_brush.red()) + "," + QString::number(color_brush.green()) + "," + QString::number(color_brush.blue()) + "," + QString::number(color_brush.alpha()) + ";" + QString::number(pen.width());
-            }else if(list_item[i]->type() == QGraphicsEllipseItem::Type){
+            } else if (list_item[i]->type() == QGraphicsEllipseItem::Type) {
                 QGraphicsEllipseItem *GEI = qgraphicsitem_cast<QGraphicsEllipseItem*>(list_item[i]);
                 QRectF rect = GEI->rect();
                 QPen pen = GEI->pen();
@@ -617,22 +633,21 @@ void MainWindow::save(QString filepath)
                 QBrush brush = GEI->brush();
                 QColor color_brush = brush.color();
                 s += "\nQGraphicsEllipseItem:" + QString::number(rect.x()) + "," + QString::number(rect.y()) + "," + QString::number(rect.width()) + "," + QString::number(rect.height()) + ";" + QString::number(color_pen.red()) + "," + QString::number(color_pen.green()) + "," + QString::number(color_pen.blue()) + "," + QString::number(color_pen.alpha()) + ";" + QString::number(color_brush.red()) + "," + QString::number(color_brush.green()) + "," + QString::number(color_brush.blue()) + "," + QString::number(color_brush.alpha()) + ";" + QString::number(pen.width());
-            }else if(list_item[i]->type() == QGraphicsTextItem::Type){
+            } else if (list_item[i]->type() == QGraphicsTextItem::Type) {
                 QGraphicsTextItem *GTI = qgraphicsitem_cast<QGraphicsTextItem*>(list_item[i]);
                 QColor color = GTI->defaultTextColor();
                 s += "\nQGraphicsTextItem:" + QString::number(GTI->x()) + "," + QString::number(GTI->y()) + ";" + GTI->toPlainText() + ";" + GTI->font().toString() + ";" + QString::number(color.red()) + "," + QString::number(color.green()) + "," + QString::number(color.blue()) + "," + QString::number(color.alpha());
-            }else if(list_item[i]->type() == QGraphicsPixmapItem::Type){
+            } else if (list_item[i]->type() == QGraphicsPixmapItem::Type) {
                 QGraphicsPixmapItem *GPI = qgraphicsitem_cast<QGraphicsPixmapItem*>(list_item[i]);
                 QPixmap pixmap = GPI->pixmap();
                 s += "\nQGraphicsPixmapItem:" + QString::number(GPI->x()) + "," + QString::number(GPI->y()) + ";" + QString::number(pixmap.width()) + ";" + QString::number(pixmap.height());
             }
-
         }
         QFile file(filepath);
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         file.write(s.toUtf8());
         file.close();
-    }else{
+    } else {
         QImage image(size, QImage::Format_ARGB32);
         image.fill(color_background);    //不填充背景有些保存的png上面会有一排画图的图标
         QPainter painter(&image);
@@ -822,21 +837,21 @@ void MainWindow::on_action_extrude_triggered()
     dialog->setLayout(vbox);
 
     connect(spinw, SIGNAL(valueChanged(int)), this, SLOT(onSpinwChanged(int)));
-//    connect(spinw, QOverload<int>::of(&QSpinBox::valueChanged), [=](int i){
-//        spinwr->setValue(i*100/wo);
-//    });
+    //    connect(spinw, QOverload<int>::of(&QSpinBox::valueChanged), [=](int i){
+    //        spinwr->setValue(i*100/wo);
+    //    });
     connect(spinh, SIGNAL(valueChanged(int)), this, SLOT(onSpinhChanged(int)));
-//    connect(spinh, QOverload<int>::of(&QSpinBox::valueChanged), [=](int i){
-//        spinhr->setValue(i*100/ho);
-//    });
+    //    connect(spinh, QOverload<int>::of(&QSpinBox::valueChanged), [=](int i){
+    //        spinhr->setValue(i*100/ho);
+    //    });
     connect(spinwr, SIGNAL(valueChanged(int)), this, SLOT(onSpinwrChanged(int)));
-//    connect(spinwr, QOverload<int>::of(&QSpinBox::valueChanged), [=](int i){
-//        spinw->setValue(wo*i/100);
-//    });
+    //    connect(spinwr, QOverload<int>::of(&QSpinBox::valueChanged), [=](int i){
+    //        spinw->setValue(wo*i/100);
+    //    });
     connect(spinhr, SIGNAL(valueChanged(int)), this, SLOT(onSpinhrChanged(int)));
-//    connect(spinhr, QOverload<int>::of(&QSpinBox::valueChanged), [=](int i){
-//        spinh->setValue(ho*i/100);
-//    });
+    //    connect(spinhr, QOverload<int>::of(&QSpinBox::valueChanged), [=](int i){
+    //        spinh->setValue(ho*i/100);
+    //    });
     connect(pushButton_confirm, SIGNAL(clicked()), dialog, SLOT(accept()));
     connect(pushButton_cancel, SIGNAL(clicked()), dialog, SLOT(reject()));
     if (dialog->exec() == QDialog::Accepted) {
@@ -1379,4 +1394,34 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 {
     qDebug() << event->size();
     //sui->graphicsView->resize(event->size());
+}
+
+void MainWindow::listWidgetCurrentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    if(current){
+        Q_UNUSED(previous);
+        scene->clearSelection();
+        int id = current->data(GRAPHICSITEM_ID).toInt();
+        QList<QGraphicsItem*> list_GI = scene->items(Qt::AscendingOrder);
+        for(int i=0; i<list_GI.count(); i++){
+            //qDebug() << id << list_GI.at(i)->data(GRAPHICSITEM_ID).toInt();
+            if(list_GI.at(i)->data(GRAPHICSITEM_ID).toInt() == id)
+                list_GI.at(i)->setSelected(true);
+        }
+    }
+}
+
+void MainWindow::listWidgetAddObject(QString drawtype)
+{
+    QListWidgetItem *LWI;
+    if (drawtype == "Path") {
+        LWI = new QListWidgetItem(QIcon(":/images/pencil.png"), drawtype);
+    } else if (drawtype == "Image"){
+        LWI = new QListWidgetItem(QIcon::fromTheme("image-x-generic"), drawtype);
+    } else {
+        LWI = new QListWidgetItem(QIcon(":/images/" + drawtype.toLower() + ".png"), drawtype);
+    }
+    LWI->setData(GRAPHICSITEM_ID, scene->GIID);
+    scene->GIID++;
+    ui->listWidget->addItem(LWI);
 }

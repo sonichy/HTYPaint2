@@ -7,7 +7,7 @@
 #include <QDesktopWidget>
 #include <QClipboard>
 
-GraphicsScene::GraphicsScene()
+GraphicsScene::GraphicsScene(QObject *parent):QGraphicsScene(parent)
 {
     brush = QBrush(Qt::transparent, Qt::SolidPattern);
 }
@@ -43,27 +43,36 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     //qDebug() << startPnt << endPnt;
     endPnt = event->scenePos();
-    if(draw_type == PATH_DRAW){
+    if (draw_type == PATH_DRAW) {
         QGraphicsPathItem *GPI = addPath(*PP, pen, brush);
         GPI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
-    }else if(draw_type == LINE_DRAW){
+        GPI->setData(GRAPHICSITEM_ID, GIID);
+        emit newItem("Path");
+    } else if (draw_type == LINE_DRAW) {
         QGraphicsLineItem *GLI = addLine(QLineF(startPnt, endPnt));;
         GLI->setPen(pen);
         GLI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
-    }else if(draw_type == RECT_DRAW){
+        GLI->setData(GRAPHICSITEM_ID, GIID);
+        emit newItem("Line");
+    } else if (draw_type == RECT_DRAW) {
         QGraphicsRectItem *GRI = addRect(QRectF(startPnt, endPnt), pen, brush);
         GRI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemClipsToShape |QGraphicsItem::ItemClipsChildrenToShape);
-    }else if(draw_type == ELLIPSE_DRAW){
+        GRI->setData(GRAPHICSITEM_ID, GIID);
+        emit newItem("Rect");
+    } else if (draw_type == ELLIPSE_DRAW) {
         QGraphicsEllipseItem *GEI = addEllipse(QRectF(startPnt, endPnt), pen, brush);
         GEI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
-    }else if(draw_type == TEXT_DRAW){
-        if(!isFill){
+        GEI->setData(GRAPHICSITEM_ID, GIID);
+        emit newItem("Ellipse");
+    } else if (draw_type == TEXT_DRAW) {
+        if (!isFill) {
             QGraphicsTextItem *GTI = addText(text, font);
             GTI->setDefaultTextColor(pen.color());
             GTI->setPos(endPnt);
             GTI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
             //GTI->setTextInteractionFlags(Qt::TextEditorInteraction);
-        }else{
+            GTI->setData(GRAPHICSITEM_ID, GIID);
+        } else {
             QGraphicsTextItem *GTI = addText(text, font);
             GTI->setDefaultTextColor(pen.color());
             QGraphicsRectItem *GRI = addRect(0, 0, GTI->boundingRect().size().width(), GTI->boundingRect().size().height(), pen, brush);
@@ -73,8 +82,10 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             GIG->addToGroup(GTI);
             addItem(GIG);
             GIG->setPos(endPnt);
+            GIG->setData(GRAPHICSITEM_ID, GIID);
         }
-    }else if(draw_type == RECT_SELECT){
+        emit newItem("Text");
+    } else if (draw_type == RECT_SELECT) {
         PP = new QPainterPath;
         PP->addRect(QRectF(startPnt, endPnt));
         setSelectionArea(*PP);

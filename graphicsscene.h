@@ -1,14 +1,17 @@
 #ifndef GRAPHICSSCENE_H
 #define GRAPHICSSCENE_H
 
+#define GRAPHICSITEM_ID Qt::UserRole
+
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 
 class GraphicsScene : public QGraphicsScene
 {
+    Q_OBJECT
 
 public:
-    GraphicsScene();
+    explicit GraphicsScene(QObject *parent = 0);
     QPointF startPnt;   //起点
     QPointF endPnt;     //终点
     QPen pen;
@@ -16,8 +19,7 @@ public:
     QFont font;
     QString text;
     QPainterPath *PP;
-    enum				/*定义图形的类型 */
-    {
+    enum { /*定义图形的类型 */
         NONE_DRAW,
         //POINT_DRAW,
         PATH_DRAW,
@@ -38,6 +40,7 @@ public:
     } draw_type;
     void copy();
     bool isFill;
+    int GIID;
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -45,6 +48,9 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
+
+signals:
+    void newItem(QString s);
 
 };
 

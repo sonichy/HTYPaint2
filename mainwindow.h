@@ -1,6 +1,8 @@
 ﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#define GRAPHICSITEM_ID Qt::UserRole
+
 #include "imagewidget.h"
 #include "graphicsscene.h"
 #include <QMainWindow>
@@ -9,7 +11,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QSpinBox>
-//#include <QGraphicsScene>
+#include <QListWidgetItem>
 
 namespace Ui {
     class MainWindow;
@@ -45,8 +47,7 @@ private:
     GraphicsScene *scene;
     void save(QString filepath);
     QSpinBox *spinw, *spinwr, *spinh, *spinhr;
-    int wo;
-    int ho;
+    int wo, ho;
 
 private slots:
     void on_action_new_triggered();
@@ -129,6 +130,9 @@ private slots:
     void moveLeftRight();
     void moveRightLeft();
     void moveRightRight();
+
+    void listWidgetAddObject(QString drawtype);
+    void listWidgetCurrentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 };
 
