@@ -11,11 +11,11 @@ class GraphicsScene : public QGraphicsScene
     Q_OBJECT
 
 public:
-    explicit GraphicsScene(QObject *parent = 0);
+    explicit GraphicsScene(QObject *parent = nullptr);
     QPointF startPnt;   //起点
     QPointF endPnt;     //终点
-    QPen pen;
-    QBrush brush;
+    QPen pen, pen_text_border;
+    QBrush brush, brush_text_background;
     QFont font;
     QString text;
     QPainterPath *PP;

@@ -65,25 +65,11 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         GEI->setData(GRAPHICSITEM_ID, GIID);
         emit newItem("Ellipse");
     } else if (draw_type == TEXT_DRAW) {
-        if (!isFill) {
-            QGraphicsTextItem *GTI = addText(text, font);
-            GTI->setDefaultTextColor(pen.color());
-            GTI->setPos(endPnt);
-            GTI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
-            //GTI->setTextInteractionFlags(Qt::TextEditorInteraction);
-            GTI->setData(GRAPHICSITEM_ID, GIID);
-        } else {
-            QGraphicsTextItem *GTI = addText(text, font);
-            GTI->setDefaultTextColor(pen.color());
-            QGraphicsRectItem *GRI = addRect(0, 0, GTI->boundingRect().size().width(), GTI->boundingRect().size().height(), pen, brush);
-            QGraphicsItemGroup *GIG = new QGraphicsItemGroup;
-            GIG->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
-            GIG->addToGroup(GRI);
-            GIG->addToGroup(GTI);
-            addItem(GIG);
-            GIG->setPos(endPnt);
-            GIG->setData(GRAPHICSITEM_ID, GIID);
-        }
+        QGraphicsTextItem *GTI = addText(text, font);
+        GTI->setDefaultTextColor(pen.color());
+        GTI->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+        GTI->setPos(endPnt);
+        GTI->setData(GRAPHICSITEM_ID, GIID);
         emit newItem("Text");
     } else if (draw_type == RECT_SELECT) {
         PP = new QPainterPath;
@@ -96,7 +82,7 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void GraphicsScene::copy()
 {
     QRectF rect(startPnt, endPnt);
-    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(), rect.x(), rect.y(), rect.width(), rect.height());
+    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(), static_cast<int>(rect.x()), static_cast<int>(rect.y()), static_cast<int>(rect.width()), static_cast<int>(rect.height()));
     //QPixmap pixmap = this->grab(rect);
     QApplication::clipboard()->setPixmap(pixmap, QClipboard::Clipboard);
 }

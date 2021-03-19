@@ -22,17 +22,9 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     Ui::MainWindow *ui;
-    QToolButton *btnColorFill, *btnColorBorder;
-    QLineEdit *lineEdit;
-    QSpinBox *spinbox;
-    QString text, path;
-    QColor colorb, colorf, color_background;
-    QCheckBox *checkBox_color_fill, *checkBox_color_border;
-    QFont font;
-    QString filename;
 
 protected:
     void dragEnterEvent(QDragEnterEvent*);
@@ -41,13 +33,14 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    QScrollArea *scrollArea;
-    ImageWidget *imageWidget;
     QLabel *LSB1,*LSB2;
     GraphicsScene *scene;
-    void save(QString filepath);
     QSpinBox *spinw, *spinwr, *spinh, *spinhr;
+    QColor colorb, colorf, color_background;
+    QFont font;
+    QString path, filename;//text,
     int wo, ho;
+    void save(QString filepath);
 
 private slots:
     void on_action_new_triggered();
@@ -66,7 +59,6 @@ private slots:
     void on_action_delete_triggered();
     void on_action_layerTop_triggered();
     void on_action_layerBottom_triggered();
-    void on_action_setWallpaper_triggered();
     void on_action_property_triggered();
     void on_action_help_triggered();
 
@@ -96,27 +88,29 @@ private slots:
     void on_actionRotateRight_triggered();
     void on_actionMirrorHorizontal_triggered();
     void on_actionMirrorVertical_triggered();
-    void on_actionFont_triggered();
+
     void on_actionZoomin_triggered();
     void on_actionZoomout_triggered();
     //void on_actionZoom1_triggered();
     void on_action_createGroup_triggered();
     void on_action_destroyGroup_triggered();
 
-    void setColorFill();
-    void setColorBorder();
+    void on_pushButton_text_font_pressed();
+    void on_pushButton_text_color_pressed();
+    void on_pushButton_pen_color_pressed();
+    void on_pushButton_brush_color_pressed();
+    void on_spinBox_pen_width_valueChanged(int v);
+    void on_checkBox_pen_toggled(bool b);
+    void on_checkBox_brush_toggled(bool b);
+
     void spinValueChange(int);
-    void textChange(QString);
+    void textChange();
     void onSpinwChanged(int);
     void onSpinhChanged(int);
     void onSpinwrChanged(int);
     void onSpinhrChanged(int);
-    void checkBox_color_border_Changed(int);
-    void checkBox_color_fill_Changed(int);
     void open(QString);
     void setPicker(QColor color);
-    void addPenWidth();
-    void reducePenWidth();
 
     void moveUp();
     void moveDown();
@@ -133,7 +127,8 @@ private slots:
 
     void listWidgetAddObject(QString drawtype);
     void listWidgetCurrentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
+    void customContextMenu(const QPoint &pos);
+    void sceneSelectionChanged();
 };
 
 #endif // MAINWINDOW_H
